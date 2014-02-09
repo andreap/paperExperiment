@@ -20,6 +20,16 @@ var height = 60;
 	strokeWidth: 30,
 	strokeCap: 'round'
 });*/
+function upperAndLowerBoundZeroOne(val){
+	if(val <= 0) {
+		return 0;
+		}
+	else if (val > 0.99) {
+		return 1;	
+		}
+	return val;
+	};
+
 
 var gap = 100;
 
@@ -47,13 +57,18 @@ function onFrame(event) {
 	
 	scrollTop = $(window).scrollTop();
 	windowHeight = $(window).height();
+	scrollMap = scrollTop / (view.size._height - windowHeight);
+	
+	angoloSup = 3* Math.PI/2 + Math.asin(upperAndLowerBoundZeroOne(scrollMap)) ;
 	
 	if ($(window).scrollTop() > gap){
 		segment1.point.y = scrollTop;
 		segment1.point.x = (view.size._width/2) + (gap - scrollTop)/2;
 	}
 	
-	segment2.handleOut.y = windowHeight * scrollTop / (view.size._height - windowHeight);
+	segment2.handleOut.y = windowHeight * scrollMap;
+	
+	console.log(angoloSup + " , " + scrollMap);
 	//console.log(segment2.handleOut.y + " , " + segment1.point.x);
 	
 	// Ciclo for con funzione seno
