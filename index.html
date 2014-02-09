@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Load the Paper.js library -->
+<link rel="stylesheet" media="screen" type="text/css" href="css/style.css">
+<script type="text/javascript" src="js/paper.js"></script>
+<script type="text/javascript" src="js/jquery-2.1.0.min.js"></script>
+
+<!-- Define inlined PaperScript associate it with myCanvas -->
+<script type="text/paperscript" canvas="myPenis">
+// The amount of segment points we want to create:
+
+// The maximum height of the wave:
+var height = 60;
+
+// Create a new path and style it:
+/*var path = new Path({
+	// 80% black:
+	strokeColor: [0.8],
+	strokeWidth: 30,
+	strokeCap: 'round'
+});*/
+
+var gap = 100;
+
+var pointTop = new Point(view.size._width / 2, gap);
+var pointBottom = new Point(view.size._width / 2, view.size._height);
+var handlerTop = new Point(0,0);
+var handlerBottom = new Point(0,-$(window).height());
+
+var segment1 = new Segment(pointTop, null, handlerTop);
+var segment2 = new Segment(pointBottom, handlerBottom, null);
+
+var linea1 = new Path(segment1, segment2);
+
+linea1.strokeWidth = 30;
+linea1.strokeColor = 'black';
+linea1.strokeCap = 'round';
+
+//linea1.add(new Point(view.size._width / 2, 0));
+//linea1.add(new Point(view.size._width / 2, view.size._height));
+
+// Select the path, so we can see how it is constructed:
+linea1.selected = true;
+
+function onFrame(event) {
+	
+	scrollTop = $(window).scrollTop();
+	windowHeight = $(window).height();
+	
+	if ($(window).scrollTop() > gap){
+		segment1.point.y = scrollTop;
+		segment1.point.x = (view.size._width/2) + (gap - scrollTop)/2;
+	}
+	
+	segment2.handleOut.y = windowHeight * scrollTop / (view.size._height - windowHeight);
+	//console.log(segment2.handleOut.y + " , " + segment1.point.x);
+	
+	// Ciclo for con funzione seno
+	/*for (var i = 0; i <= amount; i++) {
+		var segment = path.segments[i];
+
+		// A cylic value between -1 and 1
+		var sinus = Math.sin(event.time * 3 + i);
+
+		// Change the y position of the segment point:
+		segment.point.x = sinus * height + 100;
+	}*/
+	
+	//path.smooth();
+}
+</script>
+</head>
+<body>
+	<canvas id="myPenis" height="2000" width="500"></canvas>
+</body>
+</html>
