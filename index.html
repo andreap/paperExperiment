@@ -36,7 +36,7 @@ var gap = 100;
 var pointTop = new Point(view.size._width / 2, gap);
 var pointBottom = new Point(view.size._width / 2, view.size._height);
 var handlerTop = new Point(0,0);
-var handlerBottom = new Point(0,-$(window).height());
+var handlerBottom = new Point(0,0);
 
 var segment1 = new Segment(pointTop, null, handlerTop);
 var segment2 = new Segment(pointBottom, handlerBottom, null);
@@ -51,24 +51,30 @@ linea1.strokeCap = 'round';
 //linea1.add(new Point(view.size._width / 2, view.size._height));
 
 // Select the path, so we can see how it is constructed:
-linea1.selected = true;
+linea1.fullySelected = true;
 
 function onFrame(event) {
 	
 	scrollTop = $(window).scrollTop();
 	windowHeight = $(window).height();
 	scrollMap = scrollTop / (view.size._height - windowHeight);
+	altezzaHandlerBottom = (view.size._width/2) + (gap - scrollTop)/2;
 	
 	angoloSup = 3* Math.PI/2 + Math.asin(upperAndLowerBoundZeroOne(scrollMap)) ;
 	
+	
+	
 	if ($(window).scrollTop() > gap){
 		segment1.point.y = scrollTop;
-		segment1.point.x = (view.size._width/2) + (gap - scrollTop)/2;
+		segment1.point.x = altezzaHandlerBottom;
 	}
 	
-	segment2.handleOut.y = windowHeight * scrollMap;
+	segment2.handleIn.y = (-windowHeight * scrollMap)/2;
 	
-	console.log(angoloSup + " , " + scrollMap);
+	segment1.handleOut.y =  - Math.sin(angoloSup) * windowHeight * scrollMap;
+	segment1.handleOut.x =   Math.cos(angoloSup) * windowHeight * scrollMap;
+	
+	console.log(segment2.handleIn.y);
 	//console.log(segment2.handleOut.y + " , " + segment1.point.x);
 	
 	// Ciclo for con funzione seno
